@@ -1,0 +1,4 @@
+.venv/
+.env
+db_tmp.sql
+.ruff_cache/
