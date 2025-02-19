@@ -1,17 +1,19 @@
-FROM python:3.11.11-slim
+FROM python:3.11.11
 
 ENV PIP_DISABLE_PIP_VERSION_CHECK=1
 
 ENV PYTHONUNBUFFERED=1
 
-WORKDIR /TwitterCloneAPI
+WORKDIR /TwitterClone
 
-COPY ./requirements.txt /TwitterCloneAPI/requirements.txt
+COPY ./requirements.txt /TwitterClone/requirements.txt
 
-RUN pip install --no-cache-dir --upgrade -r /TwitterCloneAPI/requirements.txt
+RUN pip install --no-cache-dir --upgrade -r /TwitterClone/requirements.txt
 
-COPY ./src /TwitterCloneAPI/app
+COPY ./src /TwitterClone/app
 
 EXPOSE 8000
 
-CMD ["fastapi", "run", "app/main.py", "--port", "8000"]
+#CMD ["ls","-la"]
+#CMD ["pip","list"]
+CMD ["fastapi", "run", "src/main.py", "--port", "8000"]

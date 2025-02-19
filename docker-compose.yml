@@ -5,7 +5,7 @@ services:
     ports:
       - "5000:8000"
     volumes:
-      - .:/TwitterCloneAPI
+      - .:/TwitterClone
     depends_on:
       - twitter_clone_db
     environment:
