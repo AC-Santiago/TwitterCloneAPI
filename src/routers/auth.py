@@ -1,0 +1,63 @@
+from typing import Annotated
+
+from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlmodel import Session
+
+from crud.user import create_user, get_user_by_email
+from database.connection import get_session
+from models.user import User
+from utils.auth import decode_token, encode_token
+from utils.security import add_token_to_blacklist, verify_password
+
+router = APIRouter()
+
+
+@router.post("/login", tags=["auth"], response_model=User)
+def login(
+    form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
+    session: Annotated[Session, Depends(get_session)],
+):
+
+    user = get_user_by_email(db=session, email=form_data.username)
+    if not user or not verify_password(
+        plain_password=form_data.password, hashed_password=user.password
+    ):
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect email or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token = encode_token(
+        {"email": form_data.username, "password": form_data.password}
+    )
+    return JSONResponse(
+        content={"access_token": access_token}, status_code=status.HTTP_200_OK
+    )
+
+
+@router.post("/register", tags=["auth"], response_model=User)
+def register(user: User, session: Annotated[Session, Depends(get_session)]):
+    db_user = get_user_by_email(db=session, email=user.email)
+    if db_user:
+        raise HTTPException(status_code=400, detail="Email already registered")
+    try:
+        create_user(db=session, user=user)
+    except Exception as e:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST, detail=str(e)
+        )
+    return JSONResponse(
+        content={"message": "Usuario creado exitosamente"},
+        status_code=status.HTTP_201_CREATED,
+    )
+
+
+@router.post("/logout")
+def logout(
+    token: Annotated[str, Depends(decode_token)],
+    db: Annotated[Session, Depends(get_session)],
+):
+    add_token_to_blacklist(db, token)
+    return {"message": "Successfully logged out"}
