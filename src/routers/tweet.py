@@ -3,7 +3,7 @@ from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from typing import Annotated, List
 
-from crud.tweet import count_likes, create_tweet, get_tweet, get_tweets
+from crud.tweet import count_likes, create_tweet, get_tweet, get_tweets, count_retweets
 from crud.user import get_user_by_email
 from database.connection import get_session
 from models.models import Tweets
@@ -51,3 +51,16 @@ def get_likes_count(tweet_id: int, session: Session = Depends(get_session)):
     total_likes = count_likes(tweet_id, session)
 
     return {"tweet_id": tweet_id, "total_likes": total_likes}
+
+
+@router.get("/tweets/{tweet_id}/retweets/count", tags=["Tweets"])
+def get_retweets_count(tweet_id: int, session: Session = Depends(get_session)):
+    tweet = session.get(Tweets, tweet_id)
+    if not tweet:
+        raise HTTPException(status_code=404, detail="Tweet not found")
+
+    total_retweets = count_retweets(tweet_id, session)
+
+    return {"tweet_id": tweet_id, "total_retweets": total_retweets}
+
+

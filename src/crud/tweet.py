@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, func
 
-from models.models import Likes, Tweets, Comments
+from models.models import Likes, Tweets, Comments, Retweets
 from schemas.tweet import TweetCreate
 
 
@@ -39,12 +39,18 @@ def get_tweets_with_likes_by_user(user_id: int, session: Session):
     return tweets
 
 
-def get_tweets_with_comments_by_user(user_id: int, session: Session):
+def get_tweets_with_retweets_by_user(user_id: int, session: Session):
     tweets = session.exec(
         select(Tweets)
-        .join(Comments)
-        .where(Comments.user_id == user_id)
-        .distinct()
+        .join(Retweets)
+        .where(Retweets.user_id == user_id)
     ).all()
 
     return tweets
+
+def count_retweets(tweet_id: int, session: Session):
+    total_retweets = session.exec(
+        select(func.count()).where(Retweets.tweet_id == tweet_id)
+    ).one()
+
+    return total_retweets
