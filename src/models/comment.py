@@ -1,11 +1,12 @@
 from typing import Optional
 from sqlmodel import SQLModel, Field, Relationship
 
+class Comentario(SQLModel, table=True):
+    comentario_id: Optional[int] = Field(default=None, primary_key=True)
+    tweet_id: int = Field(foreign_key="tweet.tweet_id")
+    usuario_id: int
+    contenido: str
 
-class Comment(SQLModel, table=True):
-
-    id: Optional[int] = Field(default=None, primary_key=True)
-    content: str
-    user_id: Optional[int] = Field(default=None, foreign_key="user.id")
-    tweet_id: Optional[int] = Field(default=None, foreign_key="tweet.id")
+    # Relación con Tweet
+    tweet: Optional[Tweet] = Relationship(back_populates="comentarios")
 
