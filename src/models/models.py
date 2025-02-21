@@ -42,7 +42,7 @@ class Tweets(SQLModel, table=True):
 class Comments(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
     tweet_id: int = Field(foreign_key="tweets.id")
-    usuario_id: int
+    user_id: int
     contenido: str
 
     # Relación con Tweet
