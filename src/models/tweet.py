@@ -1,5 +1,5 @@
-from typing import List, Optional
-from sqlmodel import SQLModel, Field, Relationship
+from typing import Optional
+from sqlmodel import SQLModel, Field
 
 
 class Tweet(SQLModel, table=True):
