@@ -4,7 +4,6 @@ from typing import Annotated, List
 from sqlmodel import select
 
 from crud.tweet import (
-    get_tweets_with_comments_by_user,
     get_tweets_with_likes_by_user,
     get_tweets_with_retweets_by_user,
 )

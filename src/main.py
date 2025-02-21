@@ -7,9 +7,11 @@ from routers.tweet import router as tweet_router
 from routers.auth import router as auth_router
 from routers.profile_photo import router as profile_photo_router
 from utils.http_error_handler import HTTPErrorHandler
+import os
 
 app = FastAPI()
 
+os.makedirs("static/ProfilePhoto/", exist_ok=True)
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
