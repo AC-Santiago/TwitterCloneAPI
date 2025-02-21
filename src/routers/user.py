@@ -4,7 +4,7 @@ from typing import List
 from sqlmodel import select
 
 from database.connection import get_session
-from models.user import Users
+from models.models import Users
 
 router = APIRouter()
 
@@ -21,4 +21,3 @@ def read_user(user_id: int, session: Session = Depends(get_session)):
 def read_users(session: Session = Depends(get_session)):
     users = session.exec(select(Users)).all()
     return users
-

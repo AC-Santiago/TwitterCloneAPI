@@ -4,7 +4,7 @@ from typing import List
 from sqlmodel import select
 
 from database.connection import get_session
-from models.comment import Comment
+from models.models import Comment
 
 router = APIRouter()
 
@@ -22,3 +22,4 @@ def read_comment(comment_id: int, session: Session = Depends(get_session)):
 def read_comments(session: Session = Depends(get_session)):
     comments = session.exec(select(Comment)).all()
     return comments
+

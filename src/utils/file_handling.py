@@ -1,7 +1,7 @@
 import os
 from fastapi import UploadFile
 
-UPLOAD_DIR = "static/images"
+UPLOAD_DIR = "static/ProfilePhoto/"
 
 
 def save_uploaded_file(file: UploadFile) -> str:

@@ -4,7 +4,7 @@ from typing import List
 from sqlmodel import select
 
 from database.connection import get_session
-from models.like import Likes
+from models.models import Likes
 
 router = APIRouter()
 
@@ -16,7 +16,9 @@ def read_like(like_id: int, session: Session = Depends(get_session)):
         raise HTTPException(status_code=404, detail="Like not found")
     return like
 
+
 @router.get("/likes/", response_model=List[Likes])
 def read_likes(session: Session = Depends(get_session)):
     likes = session.exec(select(Likes)).all()
     return likes
+

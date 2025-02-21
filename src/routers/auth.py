@@ -7,7 +7,7 @@ from sqlmodel import Session
 
 from crud.user import create_user, get_user_by_email
 from database.connection import get_session
-from models.user import Users
+from models.models import Users
 from schemas.user import UserCreate
 from utils.auth import encode_token
 from utils.security import (
