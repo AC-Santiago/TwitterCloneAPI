@@ -15,8 +15,12 @@ from utils.auth import decode_token
 router = APIRouter()
 
 
-@router.get("/users/{user_id}", response_model=Users)
-def read_user(user_id: int, session: Session = Depends(get_session)):
+@router.get("/profile/", response_model=Users)
+def read_user(
+    user: Annotated[dict, Depends(decode_token)],
+    session: Session = Depends(get_session),
+):
+    user_id = get_user_by_email(session, user["email"]).id
     user = session.get(Users, user_id)
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
@@ -52,6 +56,5 @@ def get_tweets_retweeted_by_user(
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
 
-  
     tweets = get_tweets_with_retweets_by_user(user_id, session)
     return tweets
