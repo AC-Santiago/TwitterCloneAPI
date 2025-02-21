@@ -6,6 +6,7 @@ from sqlmodel import select
 from crud.tweet import (
     get_tweets_with_likes_by_user,
     get_tweets_with_retweets_by_user,
+    get_tweets_by_user,
 )
 from crud.user import get_user_by_email
 from database.connection import get_session
@@ -57,4 +58,15 @@ def get_tweets_retweeted_by_user(
         raise HTTPException(status_code=404, detail="User not found")
 
     tweets = get_tweets_with_retweets_by_user(user_id, session)
+    return tweets
+
+@router.get("/users/tweets/tweeted", response_model=List[Tweets])
+def get_tweets_tweeted_by_user(
+    user: Annotated[dict, Depends(decode_token)],
+    session: Session = Depends(get_session),
+):
+    user_id = get_user_by_email(session, user["email"]).id
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    tweets = get_tweets_by_user(user_id, session)
     return tweets
