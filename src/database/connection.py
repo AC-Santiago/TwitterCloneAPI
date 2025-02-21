@@ -1,8 +1,7 @@
 import os
 from typing import Annotated
-
 from dotenv import load_dotenv
-from fastapi import Depends 
+from fastapi import Depends
 from sqlmodel import SQLModel, Session, create_engine
 
 load_dotenv()
@@ -30,3 +29,4 @@ session_dep = Annotated[Session, Depends(get_session)]
 
 def create_db_and_tables():
     SQLModel.metadata.create_all(engine)
+
