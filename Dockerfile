@@ -14,6 +14,4 @@ COPY ./src /TwitterClone/app
 
 EXPOSE 8000
 
-#CMD ["ls","-la"]
-#CMD ["pip","list"]
 CMD ["fastapi", "run", "src/main.py", "--port", "8000"]
