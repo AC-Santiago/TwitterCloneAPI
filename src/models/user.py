@@ -4,6 +4,8 @@ from models.tweet import Tweet
 from models.comment import Comment
 from models.like import Likes
 from models.retweet import Retweet
+from models.profile_photo import ProfilePhoto
+
 
 class Users(SQLModel, table=True):
     id: Optional[int] = Field(default=None, primary_key=True)
@@ -12,7 +14,6 @@ class Users(SQLModel, table=True):
     password: str = Field(default=None)
     full_name: str = Field(default=None)
     biography: str = Field(default="")
-    picture: str = Field(default="")
 
     # Relación con Tweet
     tweets: List["Tweet"] = Relationship(back_populates="usuario")
@@ -25,3 +26,7 @@ class Users(SQLModel, table=True):
 
     # Relación con Retweet
     retweets: List["Retweet"] = Relationship(back_populates="usuario")
+
+    profile_photo: Optional["ProfilePhoto"] = Relationship(
+        back_populates="user"
+    )

@@ -7,7 +7,4 @@ from sqlmodel import SQLModel, Field
 class Likes(SQLModel, table=True):
     like_id: Optional[int] = Field(default=None, primary_key=True)
     tweet_id: int = Field(foreign_key="tweet.tweet_id")
-    usuario_id: int 
-
-
-  
+    usuario_id: int

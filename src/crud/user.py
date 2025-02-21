@@ -24,3 +24,12 @@ def create_user(db: Session, user: UserCreate):
     db.commit()
     db.refresh(db_user)
     return db_user
+
+
+def change_picture(db: Session, user_id: int, file_path: str):
+    user = db.exec(select(User).where(User.id == user_id)).first()
+    user.picture = file_path
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return user
