@@ -1,10 +1,11 @@
 import os
+from typing import List
 from fastapi import UploadFile
 
 UPLOAD_DIR = "static/ProfilePhoto/"
 
 
-def save_uploaded_file(file: UploadFile) -> str:
+def save_uploaded_file(file: UploadFile) -> List[str]:
     if not os.path.exists(UPLOAD_DIR):
         os.makedirs(UPLOAD_DIR)
 
@@ -12,4 +13,4 @@ def save_uploaded_file(file: UploadFile) -> str:
     with open(file_path, "wb") as buffer:
         buffer.write(file.file.read())
 
-    return file_path
+    return [file_path, file.filename]

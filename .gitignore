@@ -5,3 +5,5 @@ __pycache__
 .env
 db_tmp.sql
 .ruff_cache/
+
+/static/
