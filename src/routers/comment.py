@@ -8,12 +8,15 @@ from models.comment import Comment
 
 router = APIRouter()
 
+
+# Obtener un comentario por ID
 @router.get("/{comment_id}", response_model=Comment)
 def read_comment(comment_id: int, session: Session = Depends(get_session)):
     comment = session.get(Comment, comment_id)
     if not comment:
         raise HTTPException(status_code=404, detail="Comment not found")
     return comment
+
 
 @router.get("/", response_model=List[Comment])
 def read_comments(session: Session = Depends(get_session)):

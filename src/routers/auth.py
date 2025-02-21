@@ -7,7 +7,7 @@ from sqlmodel import Session
 
 from crud.user import create_user, get_user_by_email
 from database.connection import get_session
-from models.user import User
+from models.user import Users
 from schemas.user import UserCreate
 from utils.auth import encode_token
 from utils.security import (
@@ -19,7 +19,7 @@ from utils.security import (
 router = APIRouter()
 
 
-@router.post("/login", tags=["auth"], response_model=User)
+@router.post("/login", tags=["auth"], response_model=Users)
 def login(
     form_data: Annotated[OAuth2PasswordRequestForm, Depends()],
     session: Annotated[Session, Depends(get_session)],
@@ -42,7 +42,7 @@ def login(
     )
 
 
-@router.post("/register", tags=["auth"], response_model=User)
+@router.post("/register", tags=["auth"], response_model=Users)
 def register(
     user: UserCreate, session: Annotated[Session, Depends(get_session)]
 ):

@@ -1,5 +1,7 @@
+from typing import List, Optional
+from sqlmodel import Field, Relationship, SQLModel
 from typing import Optional
-from sqlmodel import SQLModel, Field, Relationship
+from sqlmodel import SQLModel, Field
 
 
 class Likes(SQLModel, table=True):
@@ -7,7 +9,5 @@ class Likes(SQLModel, table=True):
     tweet_id: int = Field(foreign_key="tweet.tweet_id")
     usuario_id: int 
 
-    # Relación con Tweet
-    tweet: Optional[Tweet] = Relationship(back_populates="likes")
 
   
