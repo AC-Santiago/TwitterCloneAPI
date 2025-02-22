@@ -4,7 +4,7 @@ from sqlmodel import Session
 from starlette.responses import FileResponse
 from crud.user import get_user_by_email
 from models.models import ProfilePhotos
-from crud.profile_photo import create_image, get_image_by_user_id
+from crud.profile_photo import create_image, create_or_update_image, get_image_by_user_id
 
 from database.connection import get_session
 from utils.auth import decode_token
@@ -27,7 +27,7 @@ def upload_image(
         filepath, filename = save_uploaded_file(file)
         user = get_user_by_email(db, user["email"])
         user_id = user.id
-        db_image = create_image(
+        db_image = create_or_update_image(
             db, file_name=filename, file_path=filepath, user_id=user_id
         )
         return db_image
