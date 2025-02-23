@@ -17,7 +17,7 @@ from utils.auth import decode_token
 router = APIRouter()
 
 
-@router.get("/profile/", response_model=Users)
+@router.get("/profile/", tags=["Users"], response_model=Users)
 def read_user(
     user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
@@ -29,13 +29,15 @@ def read_user(
     return user
 
 
-@router.get("/users/", response_model=List[Users])
+@router.get("/users/", tags=["Users"], response_model=List[Users])
 def read_users(session: Session = Depends(get_session)):
     users = session.exec(select(Users)).all()
     return users
 
 
-@router.get("/users/tweets/liked", response_model=List[Tweets])
+@router.get(
+    "/users/tweets/liked", tags=["Users-Tweets"], response_model=List[Tweets]
+)
 def get_tweets_liked_by_user(
     user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
@@ -49,7 +51,11 @@ def get_tweets_liked_by_user(
     return tweets
 
 
-@router.get("/users/tweets/retweeted", response_model=List[Tweets])
+@router.get(
+    "/users/tweets/retweeted",
+    tags=["Users-Tweets"],
+    response_model=List[Tweets],
+)
 def get_tweets_retweeted_by_user(
     user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
@@ -61,7 +67,10 @@ def get_tweets_retweeted_by_user(
     tweets = get_tweets_with_retweets_by_user(user_id, session)
     return tweets
 
-@router.get("/users/tweets/tweeted", response_model=List[Tweets])
+
+@router.get(
+    "/users/tweets/tweeted", tags=["Users-Tweets"], response_model=List[Tweets]
+)
 def get_tweets_tweeted_by_user(
     user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
@@ -72,7 +81,8 @@ def get_tweets_tweeted_by_user(
     tweets = get_tweets_by_user(user_id, session)
     return tweets
 
-@router.put("/profile/", response_model=Users)
+
+@router.put("/profile/", tags=["Users"], response_model=Users)
 def update_user(
     user: Annotated[dict, Depends(decode_token)],
     update_data: UserUpdate,
@@ -81,5 +91,10 @@ def update_user(
     user_db = get_user_by_email(session, user["email"])
     if not user_db:
         raise HTTPException(status_code=404, detail="User not found")
-    updated_user = update_user_info(session, user_db.id, new_name=update_data.name, new_password=update_data.password)
+    updated_user = update_user_info(
+        session,
+        user_db.id,
+        new_name=update_data.name,
+        new_password=update_data.password,
+    )
     return updated_user

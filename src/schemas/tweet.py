@@ -8,3 +8,11 @@ class TweetCreate(BaseModel):
 
 class TweetBase(BaseModel):
     content: str = Field(max_length=280)
+
+
+class TweetOut(TweetBase):
+    content: str = Field(max_length=280)
+    user_name: str
+
+    class Config:
+        orm_mode = True

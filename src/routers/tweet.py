@@ -3,7 +3,13 @@ from fastapi.responses import JSONResponse
 from sqlmodel import Session
 from typing import Annotated, List
 
-from crud.tweet import count_likes, create_tweet, get_tweet, get_tweets, count_retweets
+from crud.tweet import (
+    count_likes,
+    create_tweet,
+    get_tweet,
+    count_retweets,
+    get_tweets_with_username,
+)
 from crud.user import get_user_by_email
 from database.connection import get_session
 from models.models import Tweets
@@ -23,7 +29,7 @@ def read_tweet(tweet_id: int, session: Session = Depends(get_session)):
 
 @router.get("/tweets/", tags=["Tweets"], response_model=List[Tweets])
 def read_tweets(session: Session = Depends(get_session)):
-    tweets = get_tweets(session)
+    tweets = get_tweets_with_username(session)
     return tweets
 
 
@@ -62,5 +68,3 @@ def get_retweets_count(tweet_id: int, session: Session = Depends(get_session)):
     total_retweets = count_retweets(tweet_id, session)
 
     return {"tweet_id": tweet_id, "total_retweets": total_retweets}
-
-

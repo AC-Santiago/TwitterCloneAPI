@@ -9,7 +9,6 @@ from models.models import Comment
 router = APIRouter()
 
 
-# Obtener un comentario por ID
 @router.get("/{comment_id}", response_model=Comment)
 def read_comment(comment_id: int, session: Session = Depends(get_session)):
     comment = session.get(Comment, comment_id)
@@ -22,4 +21,3 @@ def read_comment(comment_id: int, session: Session = Depends(get_session)):
 def read_comments(session: Session = Depends(get_session)):
     comments = session.exec(select(Comment)).all()
     return comments
-
