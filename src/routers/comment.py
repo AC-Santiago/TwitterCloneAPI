@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlmodel import Session
-from typing import List
+from typing import Annotated, List
 
 
 from crud.comment import (
@@ -10,23 +10,23 @@ from crud.comment import (
     delete_comment,
     update_comment,
 )
+from crud.user import get_user_by_email
 from database.connection import get_session
 
 from schemas.comment import CommentCreate, CommentOut
 from utils.auth import decode_token, oauth2_scheme
 
-router = APIRouter(prefix="/comments", tags=["comments"])
+router = APIRouter(tags=["comments"])
 
 
 @router.post("/tweet/comment", response_model=CommentOut)
 async def create_comment_router(
     comment: CommentCreate,
-    token: str = Depends(oauth2_scheme),
+    user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
 ):
 
-    token_data = decode_token(token)
-    user_id = token_data.get("sub")
+    user_id: int = get_user_by_email(user["email"]).id
 
     return create_comment(
         db=session,
@@ -56,12 +56,11 @@ async def get_comments_by_tweet_router(
 @router.delete("/{comment_id}")
 async def delete_comment_router(
     comment_id: int,
-    token: str = Depends(oauth2_scheme),
+    user: Annotated[dict, Depends(decode_token)],
     session: Session = Depends(get_session),
 ):
 
-    token_data = decode_token(token)
-    user_id = token_data.get("sub")
+    user_id: int = get_user_by_email(user["email"]).id
 
     comment = get_comment(db=session, comment_id=comment_id)
     if not comment:
