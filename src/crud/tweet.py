@@ -1,6 +1,6 @@
 from sqlmodel import Session, select, func
 
-from models.models import Likes, Tweets, Comments, Retweets, Users
+from models.models import Likes, Tweets, Retweets, Users
 from schemas.tweet import TweetCreate
 
 
