@@ -7,7 +7,8 @@ services:
     volumes:
       - .:/TwitterClone
     depends_on:
-      - twitter_clone_db
+      twitter_clone_db:
+        condition: service_healthy
     environment:
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT}
@@ -25,6 +26,11 @@ services:
       POSTGRES_DB: ${DB_NAME}
     volumes:
       - twitterclone_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME} -d ${DB_NAME}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
   pgadmin:
     image: dpage/pgadmin4
     environment:
