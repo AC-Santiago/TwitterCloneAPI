@@ -17,7 +17,7 @@ from crud.like import (
 )
 from utils.auth import decode_token
 
-router = APIRouter()
+router = APIRouter(tags=["likes"])
 
 
 @router.post("/likes/", response_model=LikeOut)
