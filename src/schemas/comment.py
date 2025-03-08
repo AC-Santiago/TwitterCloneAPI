@@ -6,6 +6,10 @@ class CommentCreate(BaseModel):
     contenido: str
 
 
+class CommentEdit(BaseModel):
+    contenido: str
+
+
 class CommentOut(BaseModel):
     id: int
     tweet_id: int
