@@ -6,6 +6,10 @@ class LikeCreate(BaseModel):
     user_id: int
 
 
+class LikeCreateRequest(BaseModel):
+    tweet_id: int
+
+
 class LikeOut(BaseModel):
     id: int
     tweet_id: int

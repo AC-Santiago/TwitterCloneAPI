@@ -23,7 +23,7 @@ router = APIRouter()
 def read_tweet(tweet_id: int, session: Session = Depends(get_session)):
     tweet = get_tweet(session, tweet_id)
     if not tweet:
-        raise HTTPException(status_code=404, detail="Tweet not found")
+        raise HTTPException(status_code=404, detail="Tweet no existe")
     return tweet
 
 
